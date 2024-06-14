@@ -27,15 +27,14 @@ export default class AuthController {
            // Locate Single-Sign-On Record or Student account
            //const isUser = await Auth.withCredential(username, password);
            const isUser:any = await sso.user.findFirst({ where: { username, OR: [{ password: sha1(password) },{ unlockPin: password }]}, include: { group: { select: { title: true }}}});
-           console.log(isUser)
-           const isApplicant:any = await sso.voucher.findFirst({ where: { serial: username, pin: password }, include: { admission: true }});
+           console.log(req.body,isUser)
+
            if (isUser) {
                 let { id, tag, groupId, group: { title: groupName } } = isUser;
                 let user:any = {};
                 if(groupId == 4){ // Support
                    const data = await sso.support.findUnique({ where: { supportNo: Number(tag) } }); 
                    if(data) user = { tag, fname: data?.fname, mname: data?.mname, lname: data?.lname, mail: data?.email, descriptor: "IT Support", department: "System Support", group_id: groupId, group_name: groupName }
-                
                 } else { // Student
                   user = { tag, fname: isUser?.identity, mname: '', lname: '', mail: '', descriptor: isUser?.groupTag, department: "", group_id: groupId, group_name: groupName }
                 }
