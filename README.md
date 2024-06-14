@@ -1,2 +1,1 @@
-# ums-core
-# umsa_backend
+# Electa Voting System
