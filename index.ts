@@ -42,7 +42,7 @@ export default class Routes {
         next();
     });
     // Routes & Endpoints
-    app.get('/', (req,res) => { res.send("Electa testing")});
+    app.get('/', (req,res) => { res.send("Electa testing") });
     app.use("/apis/auth", authRoute); /** Authentication API **/
     app.use("/apis/ais", aisRoute); /** Academics API **/
     app.use("/apis/ams", amsRoute); /** Admissions API **/
