@@ -43,12 +43,12 @@ export default class Routes {
     });
     // Routes & Endpoints
     app.get('/', (req,res) => { res.send("Electa testing")});
-    app.use("/app/auth", authRoute); /** Authentication API **/
-    app.use("/app/ais", aisRoute); /** Academics API **/
-    app.use("/app/ams", amsRoute); /** Admissions API **/
-    app.use("/app/fms", fmsRoute); /** Finance API **/
-    app.use("/app/hrs", hrsRoute); /** HRS API **/
-    app.use("/app/evs", evsRoute); /** Electa API **/
+    app.use("/apis/auth", authRoute); /** Authentication API **/
+    app.use("/apis/ais", aisRoute); /** Academics API **/
+    app.use("/apis/ams", amsRoute); /** Admissions API **/
+    app.use("/apis/fms", fmsRoute); /** Finance API **/
+    app.use("/apis/hrs", hrsRoute); /** HRS API **/
+    app.use("/apis/evs", evsRoute); /** Electa API **/
     
     // Initialize Server
     app.listen(port, () => console.log(`⚡️[server]: Server is running at http://localhost:${port}`));
