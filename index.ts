@@ -9,7 +9,7 @@ import amsRoute from './route/amsRoute';
 import fmsRoute from './route/fmsRoute';
 import hrsRoute from './route/hrsRoute';
 import evsRoute from './route/evsRoute';
-import apiRoute from './route/apiRoute';
+
 dotenv.config();
 
 const fileUpload = require('express-fileupload');
@@ -42,14 +42,13 @@ export default class Routes {
         next();
     });
     // Routes & Endpoints
-    app.get('/', (req,res) => { res.send("test")});
-    app.use("/api/auth", authRoute); /** Authentication API **/
-    app.use("/api/ais", aisRoute); /** Academics API **/
-    app.use("/api/ams", amsRoute); /** Admissions API **/
-    app.use("/api/fms", fmsRoute); /** Finance API **/
-    app.use("/api/hrs", hrsRoute); /** HRS API **/
-    app.use("/api/evs", evsRoute); /** Electa API **/
-    app.use("/api/v1", apiRoute); /** Bank API **/
+    app.get('/', (req,res) => { res.send("Electa testing")});
+    app.use("/app/auth", authRoute); /** Authentication API **/
+    app.use("/app/ais", aisRoute); /** Academics API **/
+    app.use("/app/ams", amsRoute); /** Admissions API **/
+    app.use("/app/fms", fmsRoute); /** Finance API **/
+    app.use("/app/hrs", hrsRoute); /** HRS API **/
+    app.use("/app/evs", evsRoute); /** Electa API **/
     
     // Initialize Server
     app.listen(port, () => console.log(`⚡️[server]: Server is running at http://localhost:${port}`));
