@@ -27,6 +27,7 @@ export default class AuthController {
            // Locate Single-Sign-On Record or Student account
            //const isUser = await Auth.withCredential(username, password);
            const isUser:any = await sso.user.findFirst({ where: { username, OR: [{ password: sha1(password) },{ unlockPin: password }]}, include: { group: { select: { title: true }}}});
+           console.log(isUser)
            const isApplicant:any = await sso.voucher.findFirst({ where: { serial: username, pin: password }, include: { admission: true }});
            if (isUser) {
                 let { id, tag, groupId, group: { title: groupName } } = isUser;
