@@ -28,7 +28,6 @@ const sms = require("../config/sms");
 const Auth = new authModel_1.default();
 class AuthController {
     authenticateWithCredential(req, res) {
-        var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { username, password } = req.body;
@@ -48,15 +47,8 @@ class AuthController {
                         if (data)
                             user = { tag, fname: data === null || data === void 0 ? void 0 : data.fname, mname: data === null || data === void 0 ? void 0 : data.mname, lname: data === null || data === void 0 ? void 0 : data.lname, mail: data === null || data === void 0 ? void 0 : data.email, descriptor: "IT Support", department: "System Support", group_id: groupId, group_name: groupName };
                     }
-                    else if (groupId == 2) { // Staff
-                        const data = yield sso.staff.findUnique({ where: { staffNo: tag }, include: { promotion: { select: { job: true } }, job: true, unit: true }, });
-                        if (data)
-                            user = { tag, fname: data === null || data === void 0 ? void 0 : data.fname, mname: data === null || data === void 0 ? void 0 : data.mname, lname: data === null || data === void 0 ? void 0 : data.lname, mail: data === null || data === void 0 ? void 0 : data.email, descriptor: (_a = data === null || data === void 0 ? void 0 : data.job) === null || _a === void 0 ? void 0 : _a.title, department: (_b = data === null || data === void 0 ? void 0 : data.unit) === null || _b === void 0 ? void 0 : _b.title, group_id: groupId, group_name: groupName };
-                    }
                     else { // Student
-                        const data = yield sso.student.findUnique({ where: { id: tag }, include: { program: { select: { longName: true } } } });
-                        if (data)
-                            user = { tag, fname: data === null || data === void 0 ? void 0 : data.fname, mname: data === null || data === void 0 ? void 0 : data.mname, lname: data === null || data === void 0 ? void 0 : data.lname, mail: data === null || data === void 0 ? void 0 : data.email, descriptor: (_c = data === null || data === void 0 ? void 0 : data.program) === null || _c === void 0 ? void 0 : _c.longName, department: "", group_id: groupId, group_name: groupName };
+                        user = { tag, fname: isUser === null || isUser === void 0 ? void 0 : isUser.identity, mname: '', lname: '', mail: '', descriptor: isUser === null || isUser === void 0 ? void 0 : isUser.groupTag, department: "", group_id: groupId, group_name: groupName };
                     }
                     // SSO Photo
                     const photo = `${process.env.UMS_DOMAIN}/auth/photos/?tag=${encodeURIComponent(tag)}`;
@@ -89,28 +81,6 @@ class AuthController {
                                 }
                             })))
                         ];
-                    console.log(userdata);
-                    // Generate Session Token & 
-                    const token = jwt.sign(userdata || {}, process.env.SECRET, { expiresIn: 60 * 60 });
-                    // Send Response to Client
-                    return res.status(200).json({ success: true, data: userdata, token });
-                }
-                else if (isApplicant) {
-                    const data = yield sso.stepProfile.findFirst({ where: { serial: username }, include: { applicant: { select: { photo: true } } } });
-                    let user;
-                    if (data) {
-                        user = { tag: username, fname: data === null || data === void 0 ? void 0 : data.fname, mname: data === null || data === void 0 ? void 0 : data.mname, lname: data.lname, mail: data.email, descriptor: "Applicant", department: "None", group_id: 3, group_name: "Applicant" };
-                    }
-                    else {
-                        user = { tag: username, fname: "Admission", mname: "", lname: "Applicant", mail: "", descriptor: "Applicant", department: "None", group_id: 3, group_name: "Applicant" };
-                    }
-                    const photo = data ? (_d = data === null || data === void 0 ? void 0 : data.applicant) === null || _d === void 0 ? void 0 : _d.photo : `https://cdn.ucc.edu.gh/photos/?tag=${encodeURIComponent(username)}`;
-                    // Construct UserData
-                    const userdata = {
-                        user,
-                        roles: [],
-                        photo
-                    };
                     // Generate Session Token & 
                     const token = jwt.sign(userdata || {}, process.env.SECRET, { expiresIn: 60 * 60 });
                     // Send Response to Client
@@ -239,7 +209,7 @@ class AuthController {
                 const user = yield sso.user.findFirst({ where: { groupId: 1, status: true, tag } });
                 if (user) {
                     const st = yield sso.student.findUnique({ where: { id: tag } });
-                    const msg = `Please Access https://ums.aucc.edu.gh with USERNAME: ${user.username}, PIN: ${user.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`;
+                    const msg = `Please Access https://ezone-frontend.vercel.app with USERNAME: ${user.username}, PIN: ${user.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`;
                     let resp;
                     if (st && (st === null || st === void 0 ? void 0 : st.phone)) {
                         resp = yield sms(st === null || st === void 0 ? void 0 : st.phone, msg);
@@ -269,7 +239,7 @@ class AuthController {
                     const users = en === null || en === void 0 ? void 0 : en.voterData;
                     if (users === null || users === void 0 ? void 0 : users.length) {
                         const resp = yield Promise.all(users === null || users === void 0 ? void 0 : users.map((row) => __awaiter(this, void 0, void 0, function* () {
-                            const msg = `Please Access https://ums.aucc.edu.gh with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`;
+                            const msg = `Please Access https://ezone-frontend.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`;
                             if (row === null || row === void 0 ? void 0 : row.phone)
                                 return yield sms(row === null || row === void 0 ? void 0 : row.phone, msg);
                             return { code: 1002 };
@@ -296,7 +266,7 @@ class AuthController {
                 if (users === null || users === void 0 ? void 0 : users.length) {
                     const resp = yield Promise.all(users === null || users === void 0 ? void 0 : users.map((row) => __awaiter(this, void 0, void 0, function* () {
                         const st = yield sso.student.findUnique({ where: { id: row === null || row === void 0 ? void 0 : row.tag } });
-                        const msg = `Please Access https://ums.aucc.edu.gh with USERNAME: ${row.username}, PIN: ${row.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`;
+                        const msg = `Please Access https://ezone-frontend.vercel.app with USERNAME: ${row.username}, PIN: ${row.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`;
                         if (st && (st === null || st === void 0 ? void 0 : st.phone))
                             return yield sms(st.phone, msg);
                         return { code: 1002 };

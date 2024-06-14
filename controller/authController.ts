@@ -35,13 +35,8 @@ export default class AuthController {
                    const data = await sso.support.findUnique({ where: { supportNo: Number(tag) } }); 
                    if(data) user = { tag, fname: data?.fname, mname: data?.mname, lname: data?.lname, mail: data?.email, descriptor: "IT Support", department: "System Support", group_id: groupId, group_name: groupName }
                 
-                } else if(groupId == 2){ // Staff
-                   const data = await sso.staff.findUnique({ where: { staffNo: tag }, include: { promotion: { select: { job: true }}, job: true, unit: true }, }); 
-                   if(data) user = { tag, fname: data?.fname, mname: data?.mname, lname: data?.lname, mail: data?.email, descriptor: data?.job?.title, department: data?.unit?.title, group_id: groupId, group_name: groupName }
-
                 } else { // Student
-                   const data = await sso.student.findUnique({ where: { id : tag }, include: { program: { select: { longName: true }}} }); 
-                   if(data) user = { tag, fname: data?.fname, mname: data?.mname, lname: data?.lname, mail: data?.email, descriptor: data?.program?.longName, department: "", group_id: groupId, group_name: groupName }
+                  user = { tag, fname: isUser?.identity, mname: '', lname: '', mail: '', descriptor: isUser?.groupTag, department: "", group_id: groupId, group_name: groupName }
                 }
                 // SSO Photo
                 const photo = `${process.env.UMS_DOMAIN}/auth/photos/?tag=${encodeURIComponent(tag)}`;
@@ -75,27 +70,6 @@ export default class AuthController {
                       )) 
                   ]
                
-                console.log(userdata)
-                // Generate Session Token & 
-                const token = jwt.sign(userdata || {}, process.env.SECRET, { expiresIn: 60 * 60});
-                // Send Response to Client
-                return res.status(200).json({ success: true, data: userdata, token });
-            
-            } else if(isApplicant) {
-                const data:any = await sso.stepProfile.findFirst({ where: { serial: username }, include: { applicant: { select: { photo: true }}} }); 
-                let user;
-                if(data){
-                  user = { tag: username, fname: data?.fname, mname: data?.mname, lname: data.lname , mail: data.email , descriptor: "Applicant", department: "None", group_id: 3, group_name: "Applicant" }
-                } else {
-                  user = { tag: username, fname: "Admission", mname: "", lname: "Applicant" , mail: "", descriptor: "Applicant", department: "None", group_id: 3, group_name: "Applicant" }
-                }
-                const photo = data ? data?.applicant?.photo : `https://cdn.ucc.edu.gh/photos/?tag=${encodeURIComponent(username)}`;
-                // Construct UserData
-                const userdata: any = {
-                  user,
-                  roles: [],
-                  photo
-                }
                 // Generate Session Token & 
                 const token = jwt.sign(userdata || {}, process.env.SECRET, { expiresIn: 60 * 60});
                 // Send Response to Client
@@ -220,7 +194,7 @@ export default class AuthController {
         const user = await sso.user.findFirst({ where: { groupId: 1, status: true, tag } })
         if(user){
           const st = await sso.student.findUnique({ where: { id: tag }});
-          const msg = `Please Access https://ums.aucc.edu.gh with USERNAME: ${user.username}, PIN: ${user.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`
+          const msg = `Please Access https://ezone-frontend.vercel.app with USERNAME: ${user.username}, PIN: ${user.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`
           let resp;
           if(st && st?.phone) {
             resp = await sms(st?.phone,msg);
@@ -248,7 +222,7 @@ export default class AuthController {
               const users:any = en?.voterData;
               if(users?.length){
                   const resp:any = await Promise.all(users?.map(async (row:any) => {
-                    const msg = `Please Access https://ums.aucc.edu.gh with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`
+                    const msg = `Please Access https://ezone-frontend.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`
                     if(row?.phone) return await sms(row?.phone, msg);
                     return { code: 1002 }
                   }))
@@ -273,7 +247,7 @@ export default class AuthController {
             if(users?.length){
                 const resp:any = await Promise.all(users?.map(async (row:any) => {
                   const st = await sso.student.findUnique({ where: { id: row?.tag }});
-                  const msg = `Please Access https://ums.aucc.edu.gh with USERNAME: ${row.username}, PIN: ${row.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`
+                  const msg = `Please Access https://ezone-frontend.vercel.app with USERNAME: ${row.username}, PIN: ${row.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`
                   if(st && st?.phone) return await sms(st.phone,msg);
                   return { code: 1002 }
                 }))

@@ -360,8 +360,6 @@ class EvsController {
                 yield evs.$transaction((tx) => __awaiter(this, void 0, void 0, function* () {
                     var _a;
                     let { id, tag, votes, ip, location } = req.body;
-                    //tag = '24010001';
-                    //tag = 'MKL/MLTT/20/013';
                     if (!tag)
                         throw new Error(`Request user not found`);
                     if (!id)
@@ -497,11 +495,11 @@ class EvsController {
                     const list = en === null || en === void 0 ? void 0 : en.voterList;
                     if (list === null || list === void 0 ? void 0 : list.length) {
                         const voters = yield Promise.all(list === null || list === void 0 ? void 0 : list.map((r) => __awaiter(this, void 0, void 0, function* () {
-                            const ts = en.groupId == 1
-                                ? yield evs.student.findFirst({ where: { id: r } })
-                                : yield evs.staff.findFirst({ where: { staffNo: r } });
+                            // const ts:any = en.groupId == 1 
+                            //    ? await evs.student.findFirst({ where: { id: r } })
+                            //    : await evs.staff.findFirst({ where: { staffNo: r } });
                             const us = yield evs.user.findFirst({ where: { tag: r } });
-                            return ({ tag: (ts === null || ts === void 0 ? void 0 : ts.id) || (ts === null || ts === void 0 ? void 0 : ts.staffNo), name: `${ts === null || ts === void 0 ? void 0 : ts.fname} ${(ts === null || ts === void 0 ? void 0 : ts.mname) && (ts === null || ts === void 0 ? void 0 : ts.mname) + ' '}${ts === null || ts === void 0 ? void 0 : ts.lname}`, username: us === null || us === void 0 ? void 0 : us.username, pin: us === null || us === void 0 ? void 0 : us.unlockPin, phone: ts === null || ts === void 0 ? void 0 : ts.phone });
+                            return ({ tag: us === null || us === void 0 ? void 0 : us.tag, name: us === null || us === void 0 ? void 0 : us.identity, username: us === null || us === void 0 ? void 0 : us.username, pin: us === null || us === void 0 ? void 0 : us.unlockPin, phone: us === null || us === void 0 ? void 0 : us.phone });
                         })));
                         const resp = yield evs.election.update({
                             where: { id: Number(req.body.electionId) },

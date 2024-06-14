@@ -297,8 +297,6 @@ export default class EvsController {
          await evs.$transaction(async (tx:any) => {
             
             let { id,tag,votes,ip,location } = req.body;
-            //tag = '24010001';
-            //tag = 'MKL/MLTT/20/013';
             if(!tag)  throw new Error(`Request user not found`);
             if(!id)  throw new Error(`Request ID not found`);
 
@@ -419,11 +417,11 @@ export default class EvsController {
            const list:any = en?.voterList;
            if(list?.length){
               const voters = await Promise.all(list?.map(async (r:any) => {
-                  const ts:any = en.groupId == 1 
-                     ? await evs.student.findFirst({ where: { id: r } })
-                     : await evs.staff.findFirst({ where: { staffNo: r } });
-                  const us = await evs.user.findFirst({ where: { tag: r } })
-                  return ({ tag: ts?.id || ts?.staffNo, name: `${ts?.fname} ${ts?.mname && ts?.mname+' '}${ts?.lname}`, username: us?.username, pin: us?.unlockPin, phone: ts?.phone })
+                  // const ts:any = en.groupId == 1 
+                  //    ? await evs.student.findFirst({ where: { id: r } })
+                  //    : await evs.staff.findFirst({ where: { staffNo: r } });
+                  const us:any = await evs.user.findFirst({ where: { tag: r } })
+                  return ({ tag: us?.tag, name: us?.identity, username: us?.username, pin: us?.unlockPin, phone: us?.phone })
               }));
               const resp = await evs.election.update({ 
                   where: { id: Number(req.body.electionId)},

@@ -583,6 +583,8 @@ exports.Prisma.ActivityBillScalarFieldEnum = {
   id: 'id',
   billId: 'billId',
   userId: 'userId',
+  amount: 'amount',
+  discount: 'discount',
   receivers: 'receivers',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1162,6 +1164,9 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   password: 'password',
   unlockPin: 'unlockPin',
+  identity: 'identity',
+  groupTag: 'groupTag',
+  phone: 'phone',
   locked: 'locked',
   status: 'status',
   createdAt: 'createdAt',

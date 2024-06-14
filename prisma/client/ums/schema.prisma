@@ -914,6 +914,8 @@ model activityBill {
   id        String   @id @default(uuid())
   billId    String?
   userId    Int?
+  amount    Float?
+  discount  Float?
   receivers Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1766,8 +1768,11 @@ model user {
   groupId   Int
   tag       String   @unique @db.VarChar(50)
   username  String   @db.VarChar(50)
-  password  String   @db.VarChar(50)
+  password  String?  @db.VarChar(50)
   unlockPin String?  @db.VarChar(4)
+  identity  String?  @db.VarChar(650)
+  groupTag  String?  @db.VarChar(100)
+  phone  String?  @db.VarChar(10)
   locked    Boolean  @default(false)
   status    Boolean  @default(true)
   createdAt DateTime @default(now())
