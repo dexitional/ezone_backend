@@ -12,7 +12,7 @@ const pin = customAlphabet("1234567890", 4);
 const sha1 = require('sha1');
 const path = require('path');
 const fs = require("fs");
-const sms = require("../config/sms");
+const sms = require("../config/smsogh");
 
 
 const Auth = new AuthModel();
@@ -222,8 +222,8 @@ export default class AuthController {
               const users:any = en?.voterData;
               if(users?.length){
                   const resp:any = await Promise.all(users?.map(async (row:any) => {
-                    const msg = `Please Access https://ezone-frontend.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`
-                    if(row?.phone) return await sms(row?.phone, msg);
+                    const msg = `Please Access ${en.tag} Elections at https://electo.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Use 4-digit PIN as PASSWORD`
+                    if(row?.phone) return await sms([row?.phone], msg,en?.tag);
                     return { code: 1002 }
                   }))
                   return res.status(200).json(resp)
@@ -247,7 +247,7 @@ export default class AuthController {
             if(users?.length){
                 const resp:any = await Promise.all(users?.map(async (row:any) => {
                   const st = await sso.student.findUnique({ where: { id: row?.tag }});
-                  const msg = `Please Access https://ezone-frontend.vercel.app with USERNAME: ${row.username}, PIN: ${row.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`
+                  const msg = `Please Access https://electo.vercel.app with USERNAME: ${row.username}, PIN: ${row.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`
                   if(st && st?.phone) return await sms(st.phone,msg);
                   return { code: 1002 }
                 }))

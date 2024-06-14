@@ -5,6 +5,7 @@ import path from "path";
 import fs from "fs";
 import moment from "moment";
 const evs = new PrismaClient()
+const sms = require('../config/sms')
 
 
 export default class EvsController {
@@ -126,15 +127,16 @@ export default class EvsController {
             if(data?.endAt) data.endAt = moment(data?.endAt)
             if(data?.groupId) data.groupId = Number(data?.groupId)
             if(data?.voterList) data.voterList = JSON.parse(data?.voterList)
-            if(data?.status) data.status = !!data?.status
-            if(data?.allowMonitor) data.allowMonitor = !!data?.allowMonitor
-            if(data?.allowVip) data.allowVip = !!data?.allowVip
-            if(data?.allowResult) data.allowResult = !!data?.allowResult
-            if(data?.allowMask) data.allowMask = !!data?.allowMask
-            if(data?.allowEcMonitor) data.allowEcMonitor = !!data?.allowEcMonitor
-            if(data?.allowEcVip) data.allowEcVip = !!data?.allowEcVip
-            if(data?.allowEcResult) data.allowEcResult = !!data?.allowEcResult
-            if(data?.autoStop) data.autoStop = !!data?.autoStop
+            if(data?.status !== undefined) data.status = (data?.status == 1)
+            if(data?.allowMonitor !== undefined) data.allowMonitor = (data?.allowMonitor == 1)
+            if(data?.allowVip !== undefined) data.allowVip = (data?.allowVip == 1)
+            if(data?.allowResult !== undefined) data.allowResult = !!data?.allowResult
+            if(data?.allowMask != undefined) data.allowMask = (data?.allowMask == 1)
+            if(data?.allowEcMonitor != undefined) data.allowEcMonitor = (data?.allowEcMonitor == 1)
+            if(data?.allowEcVip !== undefined) data.allowEcVip = (data?.allowEcVip == 1)
+            if(data?.allowEcResult !== undefined) data.allowEcResult = (data?.allowEcResult == 1)
+            if(data?.autoStop !== undefined) data.autoStop = (data?.autoStop == 1)
+              
          const logo:any = req?.files?.logo;
          const resp = await evs.election.create({ data: data })
          if(resp){
@@ -167,15 +169,16 @@ export default class EvsController {
          if(data?.endAt) data.endAt = moment(data?.endAt)
          if(data?.groupId) data.groupId = Number(data?.groupId)
          if(data?.voterList) data.voterList = JSON.parse(data?.voterList)
-         if(data?.status) data.status = !!data?.status
-         if(data?.allowMonitor) data.allowMonitor = !!data?.allowMonitor
-         if(data?.allowVip) data.allowVip = !!data?.allowVip
-         if(data?.allowResult) data.allowResult = !!data?.allowResult
-         if(data?.allowMask) data.allowMask = !!data?.allowMask
-         if(data?.allowEcMonitor) data.allowEcMonitor = !!data?.allowEcMonitor
-         if(data?.allowEcVip) data.allowEcVip = !!data?.allowEcVip
-         if(data?.allowEcResult) data.allowEcResult = !!data?.allowEcResult
-         if(data?.autoStop) data.autoStop = !!data?.autoStop
+         if(data?.status !== undefined) data.status = (data?.status == 1)
+         if(data?.allowMonitor !== undefined) data.allowMonitor = (data?.allowMonitor == 1)
+         if(data?.allowVip !== undefined) data.allowVip = (data?.allowVip == 1)
+         if(data?.allowResult !== undefined) data.allowResult = !!data?.allowResult
+         if(data?.allowMask != undefined) data.allowMask = (data?.allowMask == 1)
+         if(data?.allowEcMonitor != undefined) data.allowEcMonitor = (data?.allowEcMonitor == 1)
+         if(data?.allowEcVip !== undefined) data.allowEcVip = (data?.allowEcVip == 1)
+         if(data?.allowEcResult !== undefined) data.allowEcResult = (data?.allowEcResult == 1)
+         if(data?.autoStop !== undefined) data.autoStop = (data?.autoStop == 1)
+            
       const logo:any = req?.files?.logo;
       const resp = await evs.election.update({
          where: { id: Number(req.params.id)},
@@ -488,6 +491,32 @@ export default class EvsController {
          return res.status(500).json({ message: error.message }) 
       }
   }
+
+
+  async sendVoterPins(req: Request,res: Response) {
+   try {
+         const { id } = req.params;
+         const en = await evs.election.findFirst({ where: { id: Number(id), status: true } });
+         if(en){
+           const users:any = en?.voterData;
+           if(users?.length){
+               const resp:any = await Promise.all(users?.map(async (row:any) => {
+                 const msg = `Please Access https://ums.aucc.edu.gh with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`
+                 if(row?.phone) return await sms(row?.phone, msg);
+                 return { code: 1002 }
+               }))
+               return res.status(200).json(resp)
+           } else {
+               return res.status(202).json({ message: `Invalid request!` })
+           }
+         }
+         return res.status(202).json({ message: `Invalid request!` })
+
+     } catch (error: any) {
+         console.log(error)
+         return res.status(500).json({ message: error.message }) 
+     }
+ }
 
   // Receipt or Transcript
   async fetchReceipt(req: Request,res: Response) {
