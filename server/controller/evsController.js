@@ -18,6 +18,7 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const moment_1 = __importDefault(require("moment"));
 const evs = new ums_1.PrismaClient();
+const sms = require('../config/sms');
 class EvsController {
     // Elections
     fetchAdminElections(req, res) {
@@ -148,24 +149,24 @@ class EvsController {
                     data.groupId = Number(data === null || data === void 0 ? void 0 : data.groupId);
                 if (data === null || data === void 0 ? void 0 : data.voterList)
                     data.voterList = JSON.parse(data === null || data === void 0 ? void 0 : data.voterList);
-                if (data === null || data === void 0 ? void 0 : data.status)
-                    data.status = !!(data === null || data === void 0 ? void 0 : data.status);
-                if (data === null || data === void 0 ? void 0 : data.allowMonitor)
-                    data.allowMonitor = !!(data === null || data === void 0 ? void 0 : data.allowMonitor);
-                if (data === null || data === void 0 ? void 0 : data.allowVip)
-                    data.allowVip = !!(data === null || data === void 0 ? void 0 : data.allowVip);
-                if (data === null || data === void 0 ? void 0 : data.allowResult)
+                if ((data === null || data === void 0 ? void 0 : data.status) !== undefined)
+                    data.status = ((data === null || data === void 0 ? void 0 : data.status) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowMonitor) !== undefined)
+                    data.allowMonitor = ((data === null || data === void 0 ? void 0 : data.allowMonitor) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowVip) !== undefined)
+                    data.allowVip = ((data === null || data === void 0 ? void 0 : data.allowVip) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowResult) !== undefined)
                     data.allowResult = !!(data === null || data === void 0 ? void 0 : data.allowResult);
-                if (data === null || data === void 0 ? void 0 : data.allowMask)
-                    data.allowMask = !!(data === null || data === void 0 ? void 0 : data.allowMask);
-                if (data === null || data === void 0 ? void 0 : data.allowEcMonitor)
-                    data.allowEcMonitor = !!(data === null || data === void 0 ? void 0 : data.allowEcMonitor);
-                if (data === null || data === void 0 ? void 0 : data.allowEcVip)
-                    data.allowEcVip = !!(data === null || data === void 0 ? void 0 : data.allowEcVip);
-                if (data === null || data === void 0 ? void 0 : data.allowEcResult)
-                    data.allowEcResult = !!(data === null || data === void 0 ? void 0 : data.allowEcResult);
-                if (data === null || data === void 0 ? void 0 : data.autoStop)
-                    data.autoStop = !!(data === null || data === void 0 ? void 0 : data.autoStop);
+                if ((data === null || data === void 0 ? void 0 : data.allowMask) != undefined)
+                    data.allowMask = ((data === null || data === void 0 ? void 0 : data.allowMask) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowEcMonitor) != undefined)
+                    data.allowEcMonitor = ((data === null || data === void 0 ? void 0 : data.allowEcMonitor) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowEcVip) !== undefined)
+                    data.allowEcVip = ((data === null || data === void 0 ? void 0 : data.allowEcVip) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowEcResult) !== undefined)
+                    data.allowEcResult = ((data === null || data === void 0 ? void 0 : data.allowEcResult) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.autoStop) !== undefined)
+                    data.autoStop = ((data === null || data === void 0 ? void 0 : data.autoStop) == 1);
                 const logo = (_a = req === null || req === void 0 ? void 0 : req.files) === null || _a === void 0 ? void 0 : _a.logo;
                 const resp = yield evs.election.create({ data: data });
                 if (resp) {
@@ -206,24 +207,24 @@ class EvsController {
                     data.groupId = Number(data === null || data === void 0 ? void 0 : data.groupId);
                 if (data === null || data === void 0 ? void 0 : data.voterList)
                     data.voterList = JSON.parse(data === null || data === void 0 ? void 0 : data.voterList);
-                if (data === null || data === void 0 ? void 0 : data.status)
-                    data.status = !!(data === null || data === void 0 ? void 0 : data.status);
-                if (data === null || data === void 0 ? void 0 : data.allowMonitor)
-                    data.allowMonitor = !!(data === null || data === void 0 ? void 0 : data.allowMonitor);
-                if (data === null || data === void 0 ? void 0 : data.allowVip)
-                    data.allowVip = !!(data === null || data === void 0 ? void 0 : data.allowVip);
-                if (data === null || data === void 0 ? void 0 : data.allowResult)
+                if ((data === null || data === void 0 ? void 0 : data.status) !== undefined)
+                    data.status = ((data === null || data === void 0 ? void 0 : data.status) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowMonitor) !== undefined)
+                    data.allowMonitor = ((data === null || data === void 0 ? void 0 : data.allowMonitor) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowVip) !== undefined)
+                    data.allowVip = ((data === null || data === void 0 ? void 0 : data.allowVip) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowResult) !== undefined)
                     data.allowResult = !!(data === null || data === void 0 ? void 0 : data.allowResult);
-                if (data === null || data === void 0 ? void 0 : data.allowMask)
-                    data.allowMask = !!(data === null || data === void 0 ? void 0 : data.allowMask);
-                if (data === null || data === void 0 ? void 0 : data.allowEcMonitor)
-                    data.allowEcMonitor = !!(data === null || data === void 0 ? void 0 : data.allowEcMonitor);
-                if (data === null || data === void 0 ? void 0 : data.allowEcVip)
-                    data.allowEcVip = !!(data === null || data === void 0 ? void 0 : data.allowEcVip);
-                if (data === null || data === void 0 ? void 0 : data.allowEcResult)
-                    data.allowEcResult = !!(data === null || data === void 0 ? void 0 : data.allowEcResult);
-                if (data === null || data === void 0 ? void 0 : data.autoStop)
-                    data.autoStop = !!(data === null || data === void 0 ? void 0 : data.autoStop);
+                if ((data === null || data === void 0 ? void 0 : data.allowMask) != undefined)
+                    data.allowMask = ((data === null || data === void 0 ? void 0 : data.allowMask) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowEcMonitor) != undefined)
+                    data.allowEcMonitor = ((data === null || data === void 0 ? void 0 : data.allowEcMonitor) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowEcVip) !== undefined)
+                    data.allowEcVip = ((data === null || data === void 0 ? void 0 : data.allowEcVip) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.allowEcResult) !== undefined)
+                    data.allowEcResult = ((data === null || data === void 0 ? void 0 : data.allowEcResult) == 1);
+                if ((data === null || data === void 0 ? void 0 : data.autoStop) !== undefined)
+                    data.autoStop = ((data === null || data === void 0 ? void 0 : data.autoStop) == 1);
                 const logo = (_a = req === null || req === void 0 ? void 0 : req.files) === null || _a === void 0 ? void 0 : _a.logo;
                 const resp = yield evs.election.update({
                     where: { id: Number(req.params.id) },
@@ -566,6 +567,34 @@ class EvsController {
                 else {
                     res.status(204).json({ message: `no record found` });
                 }
+            }
+            catch (error) {
+                console.log(error);
+                return res.status(500).json({ message: error.message });
+            }
+        });
+    }
+    sendVoterPins(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const en = yield evs.election.findFirst({ where: { id: Number(id), status: true } });
+                if (en) {
+                    const users = en === null || en === void 0 ? void 0 : en.voterData;
+                    if (users === null || users === void 0 ? void 0 : users.length) {
+                        const resp = yield Promise.all(users === null || users === void 0 ? void 0 : users.map((row) => __awaiter(this, void 0, void 0, function* () {
+                            const msg = `Please Access https://ums.aucc.edu.gh with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`;
+                            if (row === null || row === void 0 ? void 0 : row.phone)
+                                return yield sms(row === null || row === void 0 ? void 0 : row.phone, msg);
+                            return { code: 1002 };
+                        })));
+                        return res.status(200).json(resp);
+                    }
+                    else {
+                        return res.status(202).json({ message: `Invalid request!` });
+                    }
+                }
+                return res.status(202).json({ message: `Invalid request!` });
             }
             catch (error) {
                 console.log(error);

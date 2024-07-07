@@ -24,7 +24,7 @@ const pin = customAlphabet("1234567890", 4);
 const sha1 = require('sha1');
 const path = require('path');
 const fs = require("fs");
-const sms = require("../config/sms");
+const sms = require("../config/smsogh");
 const Auth = new authModel_1.default();
 class AuthController {
     authenticateWithCredential(req, res) {
@@ -38,7 +38,7 @@ class AuthController {
                 // Locate Single-Sign-On Record or Student account
                 //const isUser = await Auth.withCredential(username, password);
                 const isUser = yield sso.user.findFirst({ where: { username, OR: [{ password: sha1(password) }, { unlockPin: password }] }, include: { group: { select: { title: true } } } });
-                const isApplicant = yield sso.voucher.findFirst({ where: { serial: username, pin: password }, include: { admission: true } });
+                console.log(req.body, isUser);
                 if (isUser) {
                     let { id, tag, groupId, group: { title: groupName } } = isUser;
                     let user = {};
@@ -239,9 +239,9 @@ class AuthController {
                     const users = en === null || en === void 0 ? void 0 : en.voterData;
                     if (users === null || users === void 0 ? void 0 : users.length) {
                         const resp = yield Promise.all(users === null || users === void 0 ? void 0 : users.map((row) => __awaiter(this, void 0, void 0, function* () {
-                            const msg = `Please Access https://ezone-frontend.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`;
+                            const msg = `Please Access ${en.tag} Elections at https://electo.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Use 4-digit PIN as PASSWORD`;
                             if (row === null || row === void 0 ? void 0 : row.phone)
-                                return yield sms(row === null || row === void 0 ? void 0 : row.phone, msg);
+                                return yield sms([row === null || row === void 0 ? void 0 : row.phone], msg, en === null || en === void 0 ? void 0 : en.tag);
                             return { code: 1002 };
                         })));
                         return res.status(200).json(resp);
@@ -266,7 +266,7 @@ class AuthController {
                 if (users === null || users === void 0 ? void 0 : users.length) {
                     const resp = yield Promise.all(users === null || users === void 0 ? void 0 : users.map((row) => __awaiter(this, void 0, void 0, function* () {
                         const st = yield sso.student.findUnique({ where: { id: row === null || row === void 0 ? void 0 : row.tag } });
-                        const msg = `Please Access https://ezone-frontend.vercel.app with USERNAME: ${row.username}, PIN: ${row.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`;
+                        const msg = `Please Access https://electo.vercel.app with USERNAME: ${row.username}, PIN: ${row.unlockPin}. Note that you can use 4-digit PIN as PASSWORD`;
                         if (st && (st === null || st === void 0 ? void 0 : st.phone))
                             return yield sms(st.phone, msg);
                         return { code: 1002 };

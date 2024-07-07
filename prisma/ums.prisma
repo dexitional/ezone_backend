@@ -221,6 +221,11 @@ enum EvsActionType {
   ENDED
 }
 
+enum EvsSelType {
+  SINGLE
+  MULTIPLE
+}
+
 // AIS - ACADEMIC MANAGEMENT  MODELS
 
 model country {
@@ -1618,6 +1623,7 @@ model election {
   id             Int           @id @default(autoincrement())
   groupId        Int?
   type           String        @db.VarChar(300)
+  selectMode     EvsSelType    @default(SINGLE)
   title          String?       @db.VarChar(450)
   tag            String?       @db.VarChar(100)
   logo           String?       @db.VarChar(450)
@@ -1670,10 +1676,11 @@ model elector {
 }
 
 model portfolio {
-  id         Int     @id @default(autoincrement())
-  electionId Int
-  title      String? @db.Text
-  status     Boolean @default(true)
+  id          Int     @id @default(autoincrement())
+  electionId  Int
+  selectCount Int     @default(1)
+  title       String? @db.Text
+  status      Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1772,7 +1779,7 @@ model user {
   unlockPin String?  @db.VarChar(4)
   identity  String?  @db.VarChar(650)
   groupTag  String?  @db.VarChar(100)
-  phone  String?  @db.VarChar(10)
+  phone     String?  @db.VarChar(10)
   locked    Boolean  @default(false)
   status    Boolean  @default(true)
   createdAt DateTime @default(now())

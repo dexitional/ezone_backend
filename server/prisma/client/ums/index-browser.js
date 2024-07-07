@@ -579,6 +579,17 @@ exports.Prisma.BillScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ActivityBillScalarFieldEnum = {
+  id: 'id',
+  billId: 'billId',
+  userId: 'userId',
+  amount: 'amount',
+  discount: 'discount',
+  receivers: 'receivers',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ChargeScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
@@ -1045,6 +1056,7 @@ exports.Prisma.ElectionScalarFieldEnum = {
   id: 'id',
   groupId: 'groupId',
   type: 'type',
+  selectMode: 'selectMode',
   title: 'title',
   tag: 'tag',
   logo: 'logo',
@@ -1087,6 +1099,7 @@ exports.Prisma.ElectorScalarFieldEnum = {
 exports.Prisma.PortfolioScalarFieldEnum = {
   id: 'id',
   electionId: 'electionId',
+  selectCount: 'selectCount',
   title: 'title',
   status: 'status',
   createdAt: 'createdAt',
@@ -1153,6 +1166,9 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   password: 'password',
   unlockPin: 'unlockPin',
+  identity: 'identity',
+  groupTag: 'groupTag',
+  phone: 'phone',
   locked: 'locked',
   status: 'status',
   createdAt: 'createdAt',
@@ -1509,6 +1525,11 @@ exports.sessionMode = exports.$Enums.sessionMode = {
   E: 'E'
 };
 
+exports.EvsSelType = exports.$Enums.EvsSelType = {
+  SINGLE: 'SINGLE',
+  MULTIPLE: 'MULTIPLE'
+};
+
 exports.EvsActionType = exports.$Enums.EvsActionType = {
   STAGED: 'STAGED',
   STARTED: 'STARTED',
@@ -1582,6 +1603,7 @@ exports.Prisma.ModelName = {
   resit: 'resit',
   bankacc: 'bankacc',
   bill: 'bill',
+  activityBill: 'activityBill',
   charge: 'charge',
   collector: 'collector',
   transtype: 'transtype',

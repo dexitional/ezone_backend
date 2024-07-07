@@ -1056,6 +1056,7 @@ exports.Prisma.ElectionScalarFieldEnum = {
   id: 'id',
   groupId: 'groupId',
   type: 'type',
+  selectMode: 'selectMode',
   title: 'title',
   tag: 'tag',
   logo: 'logo',
@@ -1098,6 +1099,7 @@ exports.Prisma.ElectorScalarFieldEnum = {
 exports.Prisma.PortfolioScalarFieldEnum = {
   id: 'id',
   electionId: 'electionId',
+  selectCount: 'selectCount',
   title: 'title',
   status: 'status',
   createdAt: 'createdAt',
@@ -1521,6 +1523,11 @@ exports.sessionMode = exports.$Enums.sessionMode = {
   M: 'M',
   W: 'W',
   E: 'E'
+};
+
+exports.EvsSelType = exports.$Enums.EvsSelType = {
+  SINGLE: 'SINGLE',
+  MULTIPLE: 'MULTIPLE'
 };
 
 exports.EvsActionType = exports.$Enums.EvsActionType = {

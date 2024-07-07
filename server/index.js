@@ -13,7 +13,6 @@ const amsRoute_1 = __importDefault(require("./route/amsRoute"));
 const fmsRoute_1 = __importDefault(require("./route/fmsRoute"));
 const hrsRoute_1 = __importDefault(require("./route/hrsRoute"));
 const evsRoute_1 = __importDefault(require("./route/evsRoute"));
-const apiRoute_1 = __importDefault(require("./route/apiRoute"));
 dotenv_1.default.config();
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
@@ -41,14 +40,13 @@ class Routes {
             next();
         });
         // Routes & Endpoints
-        app.get('/', (req, res) => { res.send("test"); });
-        app.use("/api/auth", authRoute_1.default); /** Authentication API **/
-        app.use("/api/ais", aisRoute_1.default); /** Academics API **/
-        app.use("/api/ams", amsRoute_1.default); /** Admissions API **/
-        app.use("/api/fms", fmsRoute_1.default); /** Finance API **/
-        app.use("/api/hrs", hrsRoute_1.default); /** HRS API **/
-        app.use("/api/evs", evsRoute_1.default); /** Electa API **/
-        app.use("/api/v1", apiRoute_1.default); /** Bank API **/
+        app.get('/', (req, res) => { res.send("Electa testing"); });
+        app.use("/apis/auth", authRoute_1.default); /** Authentication API **/
+        app.use("/apis/ais", aisRoute_1.default); /** Academics API **/
+        app.use("/apis/ams", amsRoute_1.default); /** Admissions API **/
+        app.use("/apis/fms", fmsRoute_1.default); /** Finance API **/
+        app.use("/apis/hrs", hrsRoute_1.default); /** HRS API **/
+        app.use("/apis/evs", evsRoute_1.default); /** Electa API **/
         // Initialize Server
         app.listen(port, () => console.log(`⚡️[server]: Server is running at http://localhost:${port}`));
     }
