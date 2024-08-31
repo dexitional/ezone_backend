@@ -106,7 +106,7 @@ export default class EvsController {
          if(resp){
             const ts:any = await evs.elector.count({ where: { electionId: Number(req.params.id) } })
             const tm:any = resp?.voterData && await Promise.all(resp?.voterData?.map(async (r:any) => {
-               const ts = await evs.elector.findFirst({ where: { electionId: Number(req.params.id), tag: r?.tag } })
+               const ts = await evs.elector.findFirst({ where: { electionId: Number(req.params.id), tag: r?.tag?.toString() } })
                return { ...r, voteStatus: !!ts  }
             }))
             res.status(200).json({ ...resp, voterData: tm, turnout: ts })
@@ -127,6 +127,7 @@ export default class EvsController {
             if(data?.endAt) data.endAt = moment(data?.endAt)
             if(data?.groupId) data.groupId = Number(data?.groupId)
             if(data?.voterList) data.voterList = JSON.parse(data?.voterList)
+            if(data?.admins) data.admins = JSON.parse(data?.admins)
             if(data?.status !== undefined) data.status = (data?.status == 1)
             if(data?.allowMonitor !== undefined) data.allowMonitor = (data?.allowMonitor == 1)
             if(data?.allowVip !== undefined) data.allowVip = (data?.allowVip == 1)
@@ -169,6 +170,7 @@ export default class EvsController {
          if(data?.endAt) data.endAt = moment(data?.endAt)
          if(data?.groupId) data.groupId = Number(data?.groupId)
          if(data?.voterList) data.voterList = JSON.parse(data?.voterList)
+         if(data?.admins) data.admins = JSON.parse(data?.admins)
          if(data?.status !== undefined) data.status = (data?.status == 1)
          if(data?.allowMonitor !== undefined) data.allowMonitor = (data?.allowMonitor == 1)
          if(data?.allowVip !== undefined) data.allowVip = (data?.allowVip == 1)
@@ -178,7 +180,7 @@ export default class EvsController {
          if(data?.allowEcVip !== undefined) data.allowEcVip = (data?.allowEcVip == 1)
          if(data?.allowEcResult !== undefined) data.allowEcResult = (data?.allowEcResult == 1)
          if(data?.autoStop !== undefined) data.autoStop = (data?.autoStop == 1)
-            
+              
       const logo:any = req?.files?.logo;
       const resp = await evs.election.update({
          where: { id: Number(req.params.id)},
