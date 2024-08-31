@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // SMS 
 const axios_1 = __importDefault(require("axios"));
 //var axios = require('axios');
-module.exports = function (phone, msg, from = 'EC-UCC') {
+module.exports = function (phone, msg, from = 'ELECTA') {
     return __awaiter(this, void 0, void 0, function* () {
         const data = {
             text: msg,

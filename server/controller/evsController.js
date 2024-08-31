@@ -13,12 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // import { PrismaClient } from "@prisma/client";
-const ums_1 = require("../prisma/client/ums");
-const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const moment_1 = __importDefault(require("moment"));
+const path_1 = __importDefault(require("path"));
+const ums_1 = require("../prisma/client/ums");
 const evs = new ums_1.PrismaClient();
-const sms = require('../config/sms');
+const sms = require('../config/smsogh');
 class EvsController {
     // Elections
     fetchAdminElections(req, res) {
@@ -120,7 +120,8 @@ class EvsController {
                 if (resp) {
                     const ts = yield evs.elector.count({ where: { electionId: Number(req.params.id) } });
                     const tm = (resp === null || resp === void 0 ? void 0 : resp.voterData) && (yield Promise.all((_a = resp === null || resp === void 0 ? void 0 : resp.voterData) === null || _a === void 0 ? void 0 : _a.map((r) => __awaiter(this, void 0, void 0, function* () {
-                        const ts = yield evs.elector.findFirst({ where: { electionId: Number(req.params.id), tag: r === null || r === void 0 ? void 0 : r.tag } });
+                        var _b;
+                        const ts = yield evs.elector.findFirst({ where: { electionId: Number(req.params.id), tag: (_b = r === null || r === void 0 ? void 0 : r.tag) === null || _b === void 0 ? void 0 : _b.toString() } });
                         return Object.assign(Object.assign({}, r), { voteStatus: !!ts });
                     }))));
                     res.status(200).json(Object.assign(Object.assign({}, resp), { voterData: tm, turnout: ts }));
@@ -149,6 +150,8 @@ class EvsController {
                     data.groupId = Number(data === null || data === void 0 ? void 0 : data.groupId);
                 if (data === null || data === void 0 ? void 0 : data.voterList)
                     data.voterList = JSON.parse(data === null || data === void 0 ? void 0 : data.voterList);
+                if (data === null || data === void 0 ? void 0 : data.admins)
+                    data.admins = JSON.parse(data === null || data === void 0 ? void 0 : data.admins);
                 if ((data === null || data === void 0 ? void 0 : data.status) !== undefined)
                     data.status = ((data === null || data === void 0 ? void 0 : data.status) == 1);
                 if ((data === null || data === void 0 ? void 0 : data.allowMonitor) !== undefined)
@@ -207,6 +210,8 @@ class EvsController {
                     data.groupId = Number(data === null || data === void 0 ? void 0 : data.groupId);
                 if (data === null || data === void 0 ? void 0 : data.voterList)
                     data.voterList = JSON.parse(data === null || data === void 0 ? void 0 : data.voterList);
+                if (data === null || data === void 0 ? void 0 : data.admins)
+                    data.admins = JSON.parse(data === null || data === void 0 ? void 0 : data.admins);
                 if ((data === null || data === void 0 ? void 0 : data.status) !== undefined)
                     data.status = ((data === null || data === void 0 ? void 0 : data.status) == 1);
                 if ((data === null || data === void 0 ? void 0 : data.allowMonitor) !== undefined)
@@ -583,7 +588,7 @@ class EvsController {
                     const users = en === null || en === void 0 ? void 0 : en.voterData;
                     if (users === null || users === void 0 ? void 0 : users.length) {
                         const resp = yield Promise.all(users === null || users === void 0 ? void 0 : users.map((row) => __awaiter(this, void 0, void 0, function* () {
-                            const msg = `Please Access https://ums.aucc.edu.gh with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`;
+                            const msg = `Please Access https://electo.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`;
                             if (row === null || row === void 0 ? void 0 : row.phone)
                                 return yield sms(row === null || row === void 0 ? void 0 : row.phone, msg);
                             return { code: 1002 };

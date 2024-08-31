@@ -3,7 +3,7 @@ import axios from 'axios';
 
 //var axios = require('axios');
 
-module.exports = async function(phone: any,msg: string, from = 'EC-UCC') {
+module.exports = async function(phone: any,msg: string, from = 'ELECTA') {
     const data = {
         text : msg,
         type: 0,
