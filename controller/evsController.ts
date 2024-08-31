@@ -503,7 +503,7 @@ export default class EvsController {
            const users:any = en?.voterData;
            if(users?.length){
                const resp:any = await Promise.all(users?.map(async (row:any) => {
-                 const msg = `Please Access https://ums.aucc.edu.gh with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`
+                 const msg = `Please Access https://electo.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`
                  if(row?.phone) return await sms(row?.phone, msg);
                  return { code: 1002 }
                }))
