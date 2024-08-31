@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 // import { PrismaClient } from "@prisma/client";
-import { PrismaClient } from '../prisma/client/ums'
-import path from "path";
 import fs from "fs";
 import moment from "moment";
+import path from "path";
+import { PrismaClient } from '../prisma/client/ums';
 const evs = new PrismaClient()
 const sms = require('../config/sms')
 
