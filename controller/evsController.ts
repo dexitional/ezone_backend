@@ -504,7 +504,8 @@ export default class EvsController {
            if(users?.length){
                const resp:any = await Promise.all(users?.map(async (row:any) => {
                  const msg = `Please Access https://electo.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`
-                 if(row?.phone) return await sms(row?.phone, msg);
+                 if(row?.phone) return await sms(row?.phone, msg, "ELECTA");
+               //   if(row?.phone) return await sms(row?.phone, msg);
                  return { code: 1002 }
                }))
                return res.status(200).json(resp)

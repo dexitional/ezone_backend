@@ -223,8 +223,9 @@ export default class AuthController {
               if(users?.length){
                   const resp:any = await Promise.all(users?.map(async (row:any) => {
                     const msg = `Please Access ${en.tag} Elections at https://electo.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Use 4-digit PIN as PASSWORD`
-                    // if(row?.phone) return await sms([row?.phone], msg,en?.tag);
-                    if(row?.phone) return await sms([row?.phone]);
+                     if(row?.phone) return await sms([row?.phone], msg, 'ELECTA');
+                    //  if(row?.phone) return await sms([row?.phone], msg,en?.tag);
+                    //if(row?.phone) return await sms([row?.phone]);
                     return { code: 1002 }
                   }))
                   return res.status(200).json(resp)
