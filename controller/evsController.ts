@@ -5,7 +5,7 @@ import moment from "moment";
 import path from "path";
 import { PrismaClient } from '../prisma/client/ums';
 const evs = new PrismaClient()
-const sms = require('../config/sms')
+const sms = require('../config/smsogh')
 
 
 export default class EvsController {
