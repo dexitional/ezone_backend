@@ -590,7 +590,8 @@ class EvsController {
                         const resp = yield Promise.all(users === null || users === void 0 ? void 0 : users.map((row) => __awaiter(this, void 0, void 0, function* () {
                             const msg = `Please Access https://electo.vercel.app with USERNAME: ${row.username}, PIN: ${row.pin}. Note that you can use 4-digit PIN as PASSWORD`;
                             if (row === null || row === void 0 ? void 0 : row.phone)
-                                return yield sms(row === null || row === void 0 ? void 0 : row.phone, msg);
+                                return yield sms(row === null || row === void 0 ? void 0 : row.phone, msg, "ELECTA");
+                            //   if(row?.phone) return await sms(row?.phone, msg);
                             return { code: 1002 };
                         })));
                         return res.status(200).json(resp);
